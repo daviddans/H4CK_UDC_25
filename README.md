@@ -6,3 +6,4 @@ Our goal is to make a multiplatform app that offers a chatbot, diary, and a emot
 
 Authors: 
 David Dans Villares - student of GEI 3rd year.
+Brais Olveira Santiago - student of GEI 3rd year.
