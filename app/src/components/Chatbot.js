@@ -24,7 +24,7 @@ export default function Chatbot() {
     // ...messages -> "copia" todos los mensajes del estado anterior
     // { text: input, sender: "user" } -> es el nuevo mensaje
     //setMessages -> junta el anterior estado con el nuevo mensaje y actualiza el estado
-    setMessages([...messages, { text: input, sender: "user" }]);
+    setMessages([{ text: input, sender: "user" }, ...messages]);
 
     //Cuando el mensaje ha sido enviado, limpiamos el cuadro de texto
     setInput("");
@@ -33,17 +33,17 @@ export default function Chatbot() {
   return (
 
     //Para diseñar el contenedor del chat
-    <div>
+    <div class="chat">
 
     {/* Contenendor de Mensajes */}
 
-      <div>
+      <div class="chat-container">
         
         {/* Recorremos el array de mensajes con messages.map */}
         {/* msg -> representa cada mensaje individual en la interación */}
         {/* index -> es el número de posición de cada mensaje en el array */}
         {messages.map((msg, index) => (
-          <div>
+          <div class="message user-message">
             {msg.text}
           </div>
         ))}
@@ -56,6 +56,11 @@ export default function Chatbot() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
           placeholder="Escribe un mensaje..."
         />
 

@@ -1,43 +1,109 @@
-  input {
-    padding: 0.625em; /* Padding relativo (aproximadamente 10px) */
-    border: 0.0625em solid #ccc; /* Borde proporcional */
-    border-radius: 0.3125em; /* Border-radius proporcional */
-    font-size: 1rem; /* Tamaño de fuente relativo */
-    outline: none;
-    flex-grow: 1; /* Hace que el input ocupe todo el espacio disponible */
-    width: 70%;
-    margin-left: 0.5rem;
-    justify-content: center;
-    align-items: center;    
-    flex-direction: column;
+/* Contenedor principal del chat */
+.chat-container {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 45rem; 
+  max-width: 90vw;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1em;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 0.625em;
+  background-color: #f9f9f9;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+/* Mensajes en general */
+.message {
+  max-width: 70%;
+  word-wrap: break-word;
+  padding: 0.625em;
+  margin: 0.3125em;
+  border-radius: 0.625em;
+  font-size: 1rem;
+}
+
+/* Mensajes del usuario (a la derecha) */
+.user-message {
+  align-self: flex-end;
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Mensajes del bot (a la izquierda) */
+.bot-message {
+  align-self: flex-start;
+  background-color: #e0e0e0;
+  color: black;
+}
+
+/* Estilos del input */
+input {
+  flex-grow: 1;
+  padding: 0.625em;
+  border: 0.0625em solid #ccc;
+  border-radius: 0.3125em;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  max-width: 70vw;
+}
+
+/* Estilos del botón */
+button {
+  padding: 0.625em 1em;
+  margin-left: 0.5rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 0.3125em;
+  cursor: pointer;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.prompt {
+  padding: 0.625rem;
+  margin: 0.625rem;
+}
+
+/* Estilos responsivos para móviles y pantallas pequeñas */
+@media screen and (max-width: 768px) {
+  .chat-container {
+    height: 70vh;
+    max-width: 95vw;
   }
-  
+
+  .message {
+    max-width: 85%;
+    font-size: 0.9rem;
+  }
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 70vw;
+    margin: 0 auto;
+    padding: 0.500em;
+    box-sizing: border-box;
+  }
+
   button {
-    padding: 0.625em 1em; /* Padding relativo para el botón */
+    padding: 0.625em 1em;
     margin-left: 0.5rem;
-    margin-right: 0.5rem;
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 0.3125em; /* Border-radius proporcional */
+    border-radius: 0.3125em;
     cursor: pointer;
     font-size: 1rem;
+    white-space: nowrap;
   }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-
-  chatuser {
-    display: inline-block; /* Para que el div solo ocupe el espacio necesario */
-    text-align: right; /* Alineamos el texto a la derecha */
-    max-width: 80%; /* Limita el ancho máximo del mensaje (ajustable) */
-    word-wrap: break-word; /* Hace que el texto se divida y pase a la siguiente línea si es necesario */
-    background-color: #4CAF50; /* Fondo verde */
-    color: white; /* Color del texto */
-    padding: 10px; /* Espaciado interno */
-    margin: 5px 0; /* Espaciado entre mensajes */
-    border-radius: 10px; /* Bordes redondeados */
-  }
-  
-  
+}
