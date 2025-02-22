@@ -1,35 +1,45 @@
 import React, { useState } from "react";
 import Chatbot from "./components/Chatbot";
+import Diary from "./components/Diary";
+ 
 import './App.css';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("chat"); // Estado para la sección activa
+
+  // Función para cambiar la sección activa
+  const handleMenuClick = (section) => {
+    setActiveSection(section);
+    setIsSidebarOpen(false); // Cierra el menú después de hacer clic (opcional)
+  };
 
   return (
-    <div className="App">
-      <div className="container">
-        {/* Menú lateral minimalista */}
-        <div className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
+    <div class="App">
+      <div class="containerr">
+        {/* Menú lateral */}
+        <div class={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
           <button 
-            className="toggle-btn" 
+            class="toggle-btn" 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             {isSidebarOpen ? "←" : "→"}
           </button>
           {isSidebarOpen && (
-            <div className="menu">
+            <div class="menu">
               <ul>
-                <li>Chat</li>
-                <li>Diario</li>
-                <li>Perfil</li>
+                <li onClick={() => handleMenuClick("chat")}>ChatBot</li>
+                <li onClick={() => handleMenuClick("diario")}>Diary</li>
+                <li onClick={() => handleMenuClick("perfil")}>Perfil</li>
               </ul>
             </div>
           )}
         </div>
 
-        {/* Área principal de contenido */}
-        <div className="main-content">
-          <Chatbot />
+        {/* Contenido dinámico */}
+        <div class="main-content">
+          {activeSection === "chat" && <Chatbot />}
+          {activeSection === "diario" && <Diary />}
         </div>
       </div>
     </div>
