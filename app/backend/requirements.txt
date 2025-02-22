@@ -1,3 +1,5 @@
 requests
 python-dotenv
 weaviate-client
+python-socketio
+sentence-transformers
