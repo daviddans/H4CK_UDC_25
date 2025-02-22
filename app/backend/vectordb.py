@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 from weaviate.classes.init import Auth 
 from weaviate.classes.config import Configure,  Property, DataType
 from os import environ
-
+import numpy
 
 
 class VectorDB: 
@@ -32,15 +32,16 @@ class VectorDB:
     def addValue(self, text: str, emotion, emotionVector):
         
         embeding = self.model.encode(text)
-        print(type(embeding), type(emotionVector))
         collection = self.connection.collections.get(self.collectionName)
         collection.data.insert(properties={
             "text":text,
             "emotion":emotion
                 },
-            vector= embeding
+            vector= numpy.append(embeding, emotionVector)
         )
 
     def closeConnection(self):
         self.connection.close()
-    #FALTAN BUSQUEDAS Y POSIBLE ELIMINACINES?
+
+    def semanticSearch(self, text):
+        textEmbeding = self.model.encode(text)
