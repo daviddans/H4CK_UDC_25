@@ -14,6 +14,7 @@ class VectorDB:
                  cluster_url=environ["WEAVIATE_URL"],
                  auth_credentials=Auth.api_key(environ["WEAVIATE_API_KEY"])  
                 )
+
     # Seleccionar modelo para crear embedings
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
     # Iniciar la coleccion
@@ -27,10 +28,8 @@ class VectorDB:
                     ]
                 )
             
-    def addValue(self, text: str):
+    def addValue(self, text: str, emotion):
         embeding = self.model.encode(text)
-        #Sacar la emocion
-        emotion = []
         collection = self.connection.collections.get(self.collectionName)
         collection.data.insert(properties={
             "text":text,
@@ -41,4 +40,6 @@ class VectorDB:
             }
         )
 
+    def closeConnection(self):
+        self.connection.close()
     #FALTAN BUSQUEDAS Y POSIBLE ELIMINACINES?
