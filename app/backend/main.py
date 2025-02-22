@@ -40,7 +40,7 @@ def on_chat_question(sid, data):
     bd.addValue(text=text, emotion=emotion, emotionVector=emotionVector)
     bd.closeConnection()
 
-    sio.emit('llmResponse', {'llmResponse': 'viva españa'}, room=sid)
+    sio.emit('llmResponse', {'llmResponse': "que tal estas?"}, room=sid)
 
 if __name__ == '__main__':
     # Levanta el servidor con eventlet en el puerto 5000
