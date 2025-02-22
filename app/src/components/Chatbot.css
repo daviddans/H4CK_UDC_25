@@ -16,7 +16,16 @@
 }
 
 /* Mensajes en general */
-.message {
+.message_s {
+  max-width: 70%;
+  word-wrap: break-word;
+  padding: 0.625em;
+  margin: 0.3125em;
+  border-radius: 0.625em;
+  font-size: 1rem;
+}
+
+.message_r {
   max-width: 70%;
   word-wrap: break-word;
   padding: 0.625em;
