@@ -4,8 +4,11 @@ from llm import ask_deepseek
 
 
 def main():
-        chatquestion = "Er"
-        print(on_chat_question(chatquestion))
+        chatquestion = " Hola chatbot! "
+        answer = on_chat_question(chatquestion)["choices"][0]["message"]["content"]
+
+        print("GEPETO DICE: ")
+        print(answer)
 
 if __name__=="__main__":
         main()
