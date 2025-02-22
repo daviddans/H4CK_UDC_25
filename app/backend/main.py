@@ -14,17 +14,18 @@ def main():
 def on_chat_question(text:str):
     print("empezando")
     #Extaer emociones
-    emotionVector=llm.emotionRecognition(text=text)
+    emotion,emotionVector =llm.emotionRecognition(text=text)
     print("emociones reconocidas")
     #Generar el prompt
     prompt = text
 
     #Capturamos respuesta del llm
-    llmResponse = llm.ask_deepseek(prompt)
+    #llmResponse = llm.ask_deepseek(prompt)
+    llmResponse = "efectivamente"
     print("gepeto responde")
     #Guardamos la peticion a la bd para tenerlo como contexto
     bd = VectorDB()
-    #bd.addValue(text=text, emotion=emotionVector)
+    bd.addValue(text=text, emotion=emotion, emotionVector=emotionVector)
     bd.closeConnection()
     print("Contexto actualizado")
     return llmResponse

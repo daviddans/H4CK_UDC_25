@@ -25,19 +25,20 @@ class VectorDB:
                 vectorizer_config=Configure.Vectorizer.none(),
                 properties=[
                     Property(name="text", data_type=DataType.TEXT),
+                    Property(name="emotion", data_type=DataType.TEXT)
                     ]
                 )
             
-    def addValue(self, text: str, emotion):
+    def addValue(self, text: str, emotion, emotionVector):
+        
         embeding = self.model.encode(text)
+        print(type(embeding), type(emotionVector))
         collection = self.connection.collections.get(self.collectionName)
         collection.data.insert(properties={
             "text":text,
+            "emotion":emotion
                 },
-            vector={
-                "textEmbeding": embeding,
-                "emotion": emotion
-            }
+            vector= embeding
         )
 
     def closeConnection(self):
