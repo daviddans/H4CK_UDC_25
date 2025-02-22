@@ -35,6 +35,8 @@ export default function Chatbot() {
     //Para diseñar el contenedor del chat
     <div class="chat">
 
+    <h1>Emotional ChatBot</h1>
+
     {/* Contenendor de Mensajes */}
 
       <div class="chat-container">
