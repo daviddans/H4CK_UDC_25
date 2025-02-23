@@ -55,9 +55,6 @@ export default function Chatbot() {
     setInput("");
   };
   
-
- 
-
   return (
 
     //Para diseñar el contenedor del chat
