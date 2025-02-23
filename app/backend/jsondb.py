@@ -1,58 +1,63 @@
 import json
-from datetime import datetime
+import os
 
-def crear_entrada_diario(fecha, campo1, campo2, campo3):
+def guardar_entradas_diario(nueva_entrada, archivo="diario.json"):
     """
-    Crea un diccionario que representa una entrada del diario.
+    Guarda o actualiza una entrada en el diario.
+    
+    Si ya existe una entrada con la fecha dada, se actualiza.
+    Si no, se añade una nueva entrada.
     
     Parámetros:
-    - fecha: string con la fecha (ej: "2025-02-23") o puede generarse automáticamente.
-    - campo1, campo2, campo3: valores de los campos que se quieran almacenar.
-    
-    Retorna:
-    - dict con la entrada del diario.
-    """
-    entrada = {
-        "fecha": fecha,
-        "campo1": campo1,
-        "campo2": campo2,
-        "campo3": campo3
-    }
-    return entrada
-
-def guardar_entradas_diario(entradas, archivo="diario.json"):
-    """
-    Guarda una lista de entradas en un archivo JSON con una indentación para legibilidad.
-    
-    Parámetros:
-    - entradas: lista de diccionarios (cada uno una entrada del diario).
+    - nueva_entrada: diccionario con la entrada del diario, con claves:
+        - "fecha" (YYYY-MM-DD)
+        - "entrada"
+        - "respuestas" (ej: {"q1": "...", "q2": "..."})
     - archivo: nombre del archivo donde se guardará la información.
     """
+    if os.path.exists(archivo):
+        with open(archivo, "r", encoding="utf-8") as f:
+            try:
+                entradas = json.load(f)
+            except json.JSONDecodeError:
+                entradas = []
+    else:
+        entradas = []
+    
+    fecha = nueva_entrada.get("fecha")
+    actualizado = False
+    for i, entrada in enumerate(entradas):
+        if entrada.get("fecha") == fecha:
+            entradas[i] = nueva_entrada
+            actualizado = True
+            break
+    if not actualizado:
+        entradas.append(nueva_entrada)
+    
     with open(archivo, "w", encoding="utf-8") as f:
         json.dump(entradas, f, ensure_ascii=False, indent=4)
 
 def obtener_entrada_por_fecha(fecha, archivo="diario.json"):
     """
-    Busca y devuelve la entrada del diario correspondiente a la fecha dada.
+    Devuelve la entrada del diario correspondiente a la fecha dada.
     
     Parámetros:
-    - fecha: string en formato "YYYY-MM-DD" que indica la fecha buscada.
-    - archivo: ruta del archivo JSON donde se encuentran las entradas del diario.
+    - fecha: string en formato "YYYY-MM-DD".
+    - archivo: ruta del archivo JSON donde se guardan las entradas.
     
     Retorna:
-    - El diccionario de la entrada si se encuentra; de lo contrario, None.
+    - El diccionario de la entrada si se encuentra, o None si no se encuentra.
     """
-    try:
-        with open(archivo, "r", encoding="utf-8") as f:
-            entradas = json.load(f)
-    except FileNotFoundError:
-        print(f"El archivo {archivo} no existe.")
+    if not os.path.exists(archivo):
         return None
-
-    # Buscar la entrada que coincida con la fecha
+    
+    with open(archivo, "r", encoding="utf-8") as f:
+        try:
+            entradas = json.load(f)
+        except json.JSONDecodeError:
+            return None
+    
     for entrada in entradas:
         if entrada.get("fecha") == fecha:
             return entrada
-
-    # Si no se encuentra ninguna entrada con la fecha indicada
     return None

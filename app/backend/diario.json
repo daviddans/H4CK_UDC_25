@@ -1,0 +1,26 @@
+[
+    {
+        "fecha": "2025-02-21",
+        "entrada": "Hoy me sentí inspirado para comenzar nuevos proyectos.",
+        "respuestas": {
+            "q1": "Mañana planificaré mi día para aprovechar al máximo mi energía.",
+            "q2": "Aprendí que la inspiración puede venir de lo cotidiano."
+        }
+    },
+    {
+        "fecha": "2025-02-22",
+        "entrada": "El día estuvo lleno de desafíos, pero logré superarlos.",
+        "respuestas": {
+            "q1": "Mañana me enfocaré en mantener la calma ante las dificultades.",
+            "q2": "Descubrí que enfrentar retos fortalece mi carácter."
+        }
+    },
+    {
+        "fecha": "2025-02-23",
+        "entrada": "Tuve un día relajado y productivo.",
+        "respuestas": {
+            "q1": "Mañana continuaré con mi rutina y buscaré nuevos aprendizajes.",
+            "q2": "Entendí la importancia de equilibrar trabajo y descanso."
+        }
+    }
+]

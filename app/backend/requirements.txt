@@ -14,3 +14,7 @@ os
 socketio
 dotenv
 json
+eventlet
+transformers
+weaviate
+sentence-transformers
