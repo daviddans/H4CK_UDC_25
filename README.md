@@ -35,6 +35,9 @@ Empleando las tecnologías:
 ### 📝 Diario Emocional Inteligente  
 ![Diario Emocional](./assets/diario.jpeg)
 
+### 📝 Perfil personalizado  
+![Perfil Personalizado](./assets/perfil.jpeg)
+
 ## 👥 Equipo
 
 - **David Dans Villares** - [3º GEI - FIC]
