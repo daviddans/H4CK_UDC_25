@@ -4,7 +4,7 @@ import requests
 import json
 import os 
 import numpy
-
+from googletrans import Translator
 def ask_deepseek(prompt):
     #Lanzar pregunta a deepseek a traves de la api de openrouter
     response = requests.post(
@@ -26,17 +26,29 @@ def ask_deepseek(prompt):
 
 def emotionRecognition(text:str):
     #Reconocer las emociones de un texto utilizando un modelo basado en roberta
+
+    #Vamos a traducir el texto a ingles ya que este modelo no cuenta con un buen entrenamiento en español
+    translator = Translator()
+    text_en = translator.translate(text, src="es", dest="en")
+    text = text_en.text
+    print(text)
     classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
     model_outputs = classifier(text)
+    print("TEXTO: " + text)
+    print("SIN ORDENAR ->")
+    print(model_outputs)
+    print("\n")
     model_outputs = model_outputs[0] #Linea estupida porque el modelo por algun motivo devuelve un array de un solo elemento
-    model_outputs.sort(key=lambda item: item["label"]) #Asegurar orden alfabetico por label
+    model_outputs.sort(key=lambda item: (item["label"])) #Asegurar orden alfabetico por label
+    print("ORDENADO ->")
+    print(model_outputs)
     #Extraemos el vector de valores y la emocion mas probable
     max = 0
     emotion = ""
     outputList=[]
     for out in model_outputs:
-        last = len(outputList) -1
         outputList.append(out.get("score"))
+        last = len(outputList) -1
         if(max < outputList[last]):
             max = outputList[last]
             emotion = out.get("label")

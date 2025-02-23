@@ -1,4 +1,5 @@
 import weaviate
+import numpy
 from sentence_transformers import SentenceTransformer
 from weaviate.classes.init import Auth 
 from weaviate.classes.config import Configure,  Property, DataType
@@ -25,17 +26,19 @@ class VectorDB:
                 vectorizer_config=Configure.Vectorizer.none(),
                 properties=[
                     Property(name="text", data_type=DataType.TEXT),
-                    Property(name="emotion", data_type=DataType.TEXT)
+                    Property(name="emotion", data_type=DataType.TEXT),
+                    Property(name="date", data_type=DataType.TEXT)
                     ]
-                )
+                )   
             
-    def addValue(self, text: str, emotion, emotionVector):
+    def addValue(self, text: str, emotion, emotionVector, date):
         
         embeding = self.model.encode(text)
         collection = self.connection.collections.get(self.collectionName)
         collection.data.insert(properties={
             "text":text,
-            "emotion":emotion
+            "emotion":emotion,
+            "date": date
                 },
             vector= numpy.append(embeding, emotionVector)
         )
