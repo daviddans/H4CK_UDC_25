@@ -100,15 +100,41 @@ def on_load_diary():
     # leer json
     print("not yey")
 
+
+@sio.on('cargarPerfil')
 def on_load_profile():
-    #leer json
-    print("not yey")
+    file_path = "perfil.txt"
+    # Check if the file exists before deleting
+    if not (os.path.exists(file_path)):
+        generate_profile()
+    # Read from the file
+    with open(file_path, "r",  encoding="utf-8") as file:
+        profile = file.read()
+    return profile
 
-def on_save_profile():
-    #guardar json
-    print("not yey")
+@sio.on('cargarTareas')
+def on_load_profile():
+    file_path = "perfil.txt"
+    # Check if the file exists before deleting
+    if not (os.path.exists(file_path)):
+        generate_profile()
+    # Read from the file
+    with open(file_path, "r",  encoding="utf-8") as file:
+        profile = file.read()
+    return profile
 
-def on_generate_profile():
+@sio.on('loadTasks')
+def on_load_tasks():
+    file_path = "tasks.txt"
+    # Check if the file exists before deleting
+    if not (os.path.exists(file_path)):
+        generate_tasks()
+    # Read from the file
+    with open(file_path, "r",  encoding="utf-8") as file:
+        tasks = file.read()
+    return tasks
+
+def generate_profile():
     print("Generando analisis de personalidad")
     #Conectamos a la base de datos
     bd = VectorDB()
@@ -123,7 +149,8 @@ def on_generate_profile():
         file.write(resume)
     print("Resumen guardado en txt")
 
-def on_generate_tasks():
+@sio.on('generateTasks')
+def generate_tasks():
     #Conectamos a la base de datos
     bd = VectorDB()
     #Adquire context
@@ -135,12 +162,12 @@ def on_generate_tasks():
         context += file.read()
     prompt = "LIMITATE A TRES LINEAS: Genera TRES tareas de UNA UNICA linea, (enfocado a: /desarollo psicologico / Desarrollo personal / no explicito). Usa consejos especificos gracias al **conocimiento sobre la persona**: : \n" + context
     tasks = llm.ask_deepseek(prompt)
-    print(tasks["choices"][0]["message"]["content"])
+    # Write to a file
+    with open("perfil.txt", "w", encoding="utf-8") as file:
+        file.write(tasks)
     bd.closeConnection() #cerrar conexion
 
-    task = "Genera "
 if __name__ == '__main__':
-    on_generate_tasks() #Testeamos el generar un perfil
     # Levanta el servidor con eventlet en el puerto 5000
     print("###STARTING-BACKEND###")
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
