@@ -4,6 +4,7 @@ from flask import Flask
 import eventlet
 import eventlet.wsgi
 import llm
+from jsondb import *
 from vectordb import VectorDB
 from dotenv import load_dotenv
 import json
@@ -56,13 +57,41 @@ def on_chat_question(sid, data):
 
     sio.emit('llmResponse', {'llmResponse': textResponse}, room=sid)
 
+# leer json
+@sio.on('cargaDiario')
+def on_load_diary(sid, data):
+    fecha = data.get("fecha")
+    if not fecha:
+        sio.emit('jsonResponse', {'error': 'Fecha no proporcionada'}, room=sid)
+        return
 
-    def on_load_diary():
-        # leer json
+    textResponse = obtener_entrada_por_fecha(fecha)
+    if textResponse is None:
+        sio.emit('jsonResponse', {'error': f'No se encontró entrada para la fecha {fecha}'}, room=sid)
+    else:
+        sio.emit('jsonResponse', {'jsonResponse': textResponse}, room=sid)
+    
+        
+# guardar json local
+# guardar contexto
+@sio.on('gaurdarDatos')
+def on_save_diary(sid, data):
+    #guardar en json
+    guardar_entradas_diario(data)
 
-    def on_save_diary():
-        # guardar json local
-        # guardar contexto
+    #guardar en bdvectorial
+    fecha = data.get("fecha")
+    text = data.get('mensaje', '')
+    bd = VectorDB()
+    emotion,emotionVector =llm.emotionRecognition(text=text)
+    bd.addValue(text=text, emotion=emotion, emotionVector=emotionVector, date="01/01/2000")
+
+    #Cerramos conexion a weaviate
+    bd.closeConnection()
+    
+
+    sio.emit('ackGuardar', {'Status':'ok'}, room=sid)
+        
 
     def on_load_profile():
         #leer json
