@@ -27,6 +27,14 @@ Empleando las tecnologías:
 
 ✅ [Funcionalidad 4]: **Coach de Bienestar y Objetivos**, que propone objetivos personalizados basados en el estado emocional detectado.
 
+## 📷 Capturas de Pantalla  
+
+### 💬 Chatbot de Apoyo Emocional  
+![Chatbot](./assets/chatbot.png)
+
+### 📝 Diario Emocional Inteligente  
+![Diario Emocional](./assets/diario.png)
+
 ## 👥 Equipo
 
 - **David Dans Villares** - [3º GEI - FIC]
