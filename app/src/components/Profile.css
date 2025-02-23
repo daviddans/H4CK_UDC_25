@@ -1,4 +1,5 @@
 .container {
+  
     display: flex;
     flex-direction: column;
     height: 45rem; 
@@ -15,6 +16,7 @@
   }
   
   .promptt {
+    
     font-size: 1.5rem;
     font-weight: bold;
     color: #1a73e8;
@@ -67,6 +69,7 @@
   }
 
   .profilebutton {
+    text-align: center;
     margin-bottom: 5rem; /* Aumenta la separación en la parte inferior */
   }
   

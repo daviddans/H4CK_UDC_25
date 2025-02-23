@@ -102,7 +102,7 @@ def on_load_diary():
 
 
 @sio.on('cargarPerfil')
-def on_load_profile():
+def on_load_profile(sid):
     file_path = "perfil.txt"
     # Check if the file exists before deleting
     if not (os.path.exists(file_path)):
@@ -110,10 +110,10 @@ def on_load_profile():
     # Read from the file
     with open(file_path, "r",  encoding="utf-8") as file:
         profile = file.read()
-    return profile
+    sio.emit('profileResponse', {'text': profile}, room=sid)
 
 @sio.on('cargarTareas')
-def on_load_profile():
+def on_load_profile(sid):
     file_path = "perfil.txt"
     # Check if the file exists before deleting
     if not (os.path.exists(file_path)):
@@ -121,10 +121,10 @@ def on_load_profile():
     # Read from the file
     with open(file_path, "r",  encoding="utf-8") as file:
         profile = file.read()
-    return profile
+    sio.emit('tasksResponse', {'text': profile}, room=sid)
 
 @sio.on('loadTasks')
-def on_load_tasks():
+def on_load_tasks(sid):
     file_path = "tasks.txt"
     # Check if the file exists before deleting
     if not (os.path.exists(file_path)):
@@ -132,7 +132,7 @@ def on_load_tasks():
     # Read from the file
     with open(file_path, "r",  encoding="utf-8") as file:
         tasks = file.read()
-    return tasks
+    sio.emit('tasksLoadResponse', {'tasks': tasks}, room=sid)
 
 def generate_profile():
     print("Generando analisis de personalidad")
@@ -163,7 +163,7 @@ def generate_tasks():
     prompt = "LIMITATE A TRES LINEAS: Genera TRES tareas de UNA UNICA linea, (enfocado a: /desarollo psicologico / Desarrollo personal / no explicito). Usa consejos especificos gracias al **conocimiento sobre la persona**: : \n" + context
     tasks = llm.ask_deepseek(prompt)
     # Write to a file
-    with open("perfil.txt", "w", encoding="utf-8") as file:
+    with open("tasks.txt", "w", encoding="utf-8") as file:
         file.write(tasks)
     bd.closeConnection() #cerrar conexion
 
