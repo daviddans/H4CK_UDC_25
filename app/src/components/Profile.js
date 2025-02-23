@@ -8,7 +8,7 @@ export default function Profile() {
             <h1>Emotional Profile</h1>
             <div class="container">
         
-                <div class="prompt">Recuerda beber agua hoy!</div>
+                <div class="promptt">Recuerda beber agua hoy!</div>
                 <div class="todo-list">
                 <h2>Tareas del día</h2>
                 <ul class="task-list">
