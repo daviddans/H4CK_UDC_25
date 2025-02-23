@@ -111,6 +111,7 @@ button:hover {
   .message {
     max-width: 85%;
     font-size: 0.9rem;
+    text-align: right;
   }
 
   .input-container {

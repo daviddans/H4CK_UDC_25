@@ -33,7 +33,6 @@ class VectorDB:
                 )   
             
     def addValue(self, text: str, emotion, emotionVector, date):
-        
         embeding = self.model.encode(text)
         collection = self.connection.collections.get(self.collectionName)
         collection.data.insert(properties={
