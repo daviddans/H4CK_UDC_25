@@ -9,6 +9,7 @@ export default function Profile() {
   const [completedTasks, setCompletedTasks] = useState({});
   const [profileText, setProfileText] = useState("Recuerda beber agua hoy!");
   const [tasks, setTasks] = useState([]);
+  const [loadingTasks, setLoadingTasks] = useState(false); // Estado para deshabilitar el botón
 
   // Alterna el estado de completado de una tarea
   const toggleTask = (index) => {
@@ -20,6 +21,7 @@ export default function Profile() {
 
   // Listener para recibir el perfil desde el backend
   useEffect(() => {
+    socket.emit("cargarPerfil");
     socket.on("profileResponse", (data) => {
       if (data && data.text) {
         setProfileText(data.text);
@@ -30,40 +32,48 @@ export default function Profile() {
     };
   }, []);
 
-  // Listener para recibir las tareas desde el backend
+  // Listener para recibir las tareas (tanto al cargar como al regenerar)
   useEffect(() => {
-    socket.on("tasksResponse", (data) => {
+    socket.emit("loadTasks");
+
+    const handleTasksResponse = (data) => {
       if (data && data.tasks) {
-        // Separamos el string en líneas y filtramos las vacías
         const tasksArray = data.tasks.split("\n").filter((t) => t.trim() !== "");
         setTasks(tasksArray);
+        setLoadingTasks(false); // Habilita el botón cuando llegan las tareas
       }
-    });
+    };
+
+    // Escuchar eventos tanto para la carga inicial como para la regeneración
+    socket.on("tasksLoadResponse", handleTasksResponse);
+    socket.on("tasksResponse", handleTasksResponse);
+
     return () => {
-      socket.off("tasksResponse");
+      socket.off("tasksLoadResponse", handleTasksResponse);
+      socket.off("tasksResponse", handleTasksResponse);
     };
   }, []);
 
-  // Función para emitir el evento y recargar el perfil
-  const cargarProfile = () => {
-    socket.emit("cargarPerfil");
+  // Función para generar nuevas tareas
+  const cargarTareas = () => {
+    if (loadingTasks) return;
+    setLoadingTasks(true); // Deshabilita el botón
+    socket.emit("generateTasks"); // Se envía al backend para regenerar tareas
   };
 
-  // Función para emitir el evento y recargar las tareas
-  const cargarTareas = () => {
-    socket.emit("cargarTareas");
+  // Función para convertir `**texto**` en `<b>texto</b>`
+  const formatText = (text) => {
+    return text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>"); // Reemplaza `**negrita**` por `<b>negrita</b>`
   };
 
   return (
     <div>
       <h1>Emotional Profile</h1>
       <div className="container">
-        {/* Sección del perfil */}
         <div className="profile-section">
           <div className="promptt">{profileText}</div>
         </div>
 
-        {/* Sección de tareas */}
         <div className="todo-list">
           <h2>Tareas del día</h2>
           <ul className="task-list">
@@ -72,11 +82,9 @@ export default function Profile() {
                 <li
                   key={index}
                   className="task-item"
-                  onClick={() => toggleTask(index)}
+                  onClick={() => setCompletedTasks((prev) => ({ ...prev, [index]: !prev[index] }))}
                   style={{
-                    textDecoration: completedTasks[index]
-                      ? "line-through"
-                      : "none",
+                    textDecoration: completedTasks[index] ? "line-through" : "none",
                     color: completedTasks[index] ? "gray" : "black",
                     border: "1px solid #ccc",
                     padding: "10px",
@@ -84,16 +92,23 @@ export default function Profile() {
                     cursor: "pointer",
                     margin: "5px 0",
                   }}
-                >
-                  {task}
-                </li>
+                  dangerouslySetInnerHTML={{ __html: formatText(task) }} // Convierte texto a HTML
+                ></li>
               ))
             ) : (
               <li className="task-item">No hay tareas disponibles</li>
             )}
           </ul>
-          <button className="profilebutton" onClick={cargarTareas}>
-            Regenerar Tareas
+          <button
+            className="tasksbutton"
+            onClick={cargarTareas}
+            disabled={loadingTasks} // Deshabilita el botón mientras está cargando
+            style={{
+              backgroundColor: loadingTasks ? "#ccc" : "#007bff",
+              cursor: loadingTasks ? "not-allowed" : "pointer",
+            }}
+          >
+            {loadingTasks ? "Generando..." : "Regenerar Tareas"}
           </button>
         </div>
       </div>
