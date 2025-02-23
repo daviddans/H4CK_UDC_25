@@ -8,7 +8,6 @@ from os import environ
 import numpy
 import json
 
-
 class VectorDB: 
     
     def __init__(self):
@@ -60,3 +59,16 @@ class VectorDB:
             objects += json.dumps(o.properties, indent=4) + "\n\n"
 
         return objects
+
+    def allData(self):
+        #Importamos toda la bd
+        collection = self.connection.collections.get(self.collectionName)
+        vectors = numpy.array
+        data = ""
+        for item in collection.iterator(include_vector=False):
+            data += json.dumps(item.properties, indent=4) + "\n\n"
+        return data
+        
+
+
+

@@ -21,6 +21,7 @@ app.wsgi_app = socketio.WSGIApp(sio, app.wsgi_app)
 def main():
     print("###STARTING-BACKEND###")
     socketio.Client()
+    
 
 @sio.on('preguntaUser')
 def on_chat_question(sid, data):
@@ -57,29 +58,41 @@ def on_chat_question(sid, data):
     sio.emit('llmResponse', {'llmResponse': textResponse}, room=sid)
 
 
-    def on_load_diary():
-        # leer json
+def on_load_diary():
+    # leer json
+    print("not yey")
+def on_save_diary():
+    # guardar json local
+    # guardar contexto
+    print("not yey")
+def on_load_profile():
+    #leer json
+    print("not yey")
+def on_save_profile():
+    #guardar json
+    print("not yey")
 
-    def on_save_diary():
-        # guardar json local
-        # guardar contexto
 
-    def on_load_profile():
-        #leer json
+def on_generate_profile():
+    print("Generando analisis de personalidad")
+    #Conectamos a la base de datos
+    bd = VectorDB()
+    context = bd.allData() #Extraemos toda la informacion
+    bd.closeConnection()
+    task =  "Construyeme brebemente un perfil de personalidad, basado en la teoria del eneagrama. Dando una descripcion en tres lineas. "
+    prompt = task + "Emplea todo este conocimiento de la persona para ello:\n" + context
 
-    def on_save_profile():
-        #guardar json
+    response = llm.ask_deepseek(prompt=prompt)
+    print(response["choices"][0]["message"]["content"] )
 
-    def on_generate_profile():
-        #cluster data
-        #Generate a personaloty class
-        #using a debug variable
-
-    def on_generate_tasks():
-        #generate tasks on context
-        #using a debug variable
+def on_generate_tasks():
+    #generate tasks on context
+    #using a debug variable
+    print("not yey")
 
 if __name__ == '__main__':
+    on_generate_profile() #Testeamos el generar un perfil
     # Levanta el servidor con eventlet en el puerto 5000
    
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
+    
