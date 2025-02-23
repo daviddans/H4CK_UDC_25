@@ -62,6 +62,10 @@
     text-align: center; /* Centra el texto */
   }
 
+  .task-item.active {
+    background-color: dimgrey;
+  }
+
   .profilebutton {
     margin-bottom: 5rem; /* Aumenta la separación en la parte inferior */
   }
