@@ -3,8 +3,10 @@ import numpy
 from sentence_transformers import SentenceTransformer
 from weaviate.classes.init import Auth 
 from weaviate.classes.config import Configure,  Property, DataType
+from weaviate.classes.query import  MetadataQuery
 from os import environ
 import numpy
+import json
 
 
 class VectorDB: 
@@ -46,5 +48,15 @@ class VectorDB:
     def closeConnection(self):
         self.connection.close()
 
-    def semanticSearch(self, text):
-        textEmbeding = self.model.encode(text)
+    def semanticSearch(self, text, emotionVector, max):
+        textembbeding = self.model.encode(text)
+        collection = self.connection.collections.get(self.collectionName)
+        result = collection.query.near_vector(
+            near_vector=numpy.append(textembbeding,emotionVector),
+            limit=max,
+        )   
+        objects = ""
+        for o in result.objects:
+            objects += json.dumps(o.properties, indent=4) + "\n\n"
+
+        return objects
