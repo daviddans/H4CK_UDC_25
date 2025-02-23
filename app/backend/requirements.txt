@@ -1,3 +1,16 @@
+#The dependencies of the python backend where recopilated after the development, they could be incomplete
+# or have misspelings, feel free to report any trouble you find with libraries.
+
 requests
 python-dotenv
 weaviate-client
+python-socketio
+sentence-transformers
+eventlet
+flask
+transformers
+numpy
+os
+socketio
+dotenv
+json

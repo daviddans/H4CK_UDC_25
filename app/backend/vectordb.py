@@ -1,9 +1,10 @@
 import weaviate
+import numpy
 from sentence_transformers import SentenceTransformer
 from weaviate.classes.init import Auth 
 from weaviate.classes.config import Configure,  Property, DataType
 from os import environ
-
+import numpy
 
 
 class VectorDB: 
@@ -25,21 +26,25 @@ class VectorDB:
                 vectorizer_config=Configure.Vectorizer.none(),
                 properties=[
                     Property(name="text", data_type=DataType.TEXT),
+                    Property(name="emotion", data_type=DataType.TEXT),
+                    Property(name="date", data_type=DataType.TEXT)
                     ]
-                )
+                )   
             
-    def addValue(self, text: str, emotion):
+    def addValue(self, text: str, emotion, emotionVector, date):
+        
         embeding = self.model.encode(text)
         collection = self.connection.collections.get(self.collectionName)
         collection.data.insert(properties={
             "text":text,
+            "emotion":emotion,
+            "date": date
                 },
-            vector={
-                "textEmbeding": embeding,
-                "emotion": emotion
-            }
+            vector= numpy.append(embeding, emotionVector)
         )
 
     def closeConnection(self):
         self.connection.close()
-    #FALTAN BUSQUEDAS Y POSIBLE ELIMINACINES?
+
+    def semanticSearch(self, text):
+        textEmbeding = self.model.encode(text)
