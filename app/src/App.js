@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Chatbot from "./components/Chatbot";
 import Diary from "./components/Diary";
- 
+import Profile from "./components/Profile";
 import './App.css';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
               <ul>
                 <li onClick={() => handleMenuClick("chat")}>ChatBot</li>
                 <li onClick={() => handleMenuClick("diario")}>Diary</li>
-                <li onClick={() => handleMenuClick("perfil")}>Perfil</li>
+                <li onClick={() => handleMenuClick("perfil")}>Profile</li>
               </ul>
             </div>
           )}
@@ -40,6 +40,7 @@ function App() {
         <div class="main-content">
           {activeSection === "chat" && <Chatbot />}
           {activeSection === "diario" && <Diary />}
+          {activeSection === "perfil" && <Profile />}
         </div>
       </div>
     </div>

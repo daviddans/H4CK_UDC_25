@@ -1,0 +1,69 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 45rem; 
+    max-width: 90vw;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1em;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 0.625em;
+    background-color: #f9f9f9;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+  }
+  
+  .prompt {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1a73e8;
+    height: 20rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+  }
+  
+  .todo-list {
+    width: 100%;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos estén en columna */
+    padding: 0;
+    margin: 0;
+    height: 60%;
+  }
+  
+  .task-item {
+    display: flex; /* Usamos flexbox para los items */
+    justify-content: center; /* Centra horizontalmente el contenido dentro de cada item */
+    align-items: center; /* Centra verticalmente el contenido dentro de cada item */
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    width: 100%; /* Asegura que cada elemento ocupe el 100% del ancho del contenedor */
+    box-sizing: border-box;
+    text-align: center; /* Centra el texto */
+  }
+
+  .profilebutton {
+    margin-bottom: 5rem; /* Aumenta la separación en la parte inferior */
+  }
+  
+  
