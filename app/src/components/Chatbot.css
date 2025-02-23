@@ -28,6 +28,7 @@
 
 /* Mensajes del usuario (a la derecha) */
 .user-message {
+  text-align: justify;
   align-self: flex-end;
   background-color: #4CAF50;
   color: white;
@@ -35,6 +36,7 @@
 
 /* Mensajes del bot (a la izquierda) */
 .bot-message {
+  text-align: justify;
   align-self: flex-start;
   background-color: #e0e0e0;
   color: black;

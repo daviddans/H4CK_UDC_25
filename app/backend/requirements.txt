@@ -13,4 +13,12 @@ numpy
 os
 socketio
 dotenv
+<<<<<<< HEAD
 json
+=======
+json
+eventlet
+transformers
+weaviate
+sentence-transformers
+>>>>>>> b90bb4f6e42b0706c3401350cfe55d714489297f

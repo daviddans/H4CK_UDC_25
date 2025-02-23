@@ -7,9 +7,8 @@ import llm
 from jsondb import *
 from vectordb import VectorDB
 from dotenv import load_dotenv
-import json
 from datetime import date
-import numpy
+
 
 
 load_dotenv()
@@ -21,11 +20,6 @@ sio = socketio.Server(cors_allowed_origins="*")
 app = Flask(__name__)
 # Integra Socket.IO con Flask
 app.wsgi_app = socketio.WSGIApp(sio, app.wsgi_app)
-
-def main():
-    print("###STARTING-BACKEND###")
-    socketio.Client()
-    
 
 @sio.on('preguntaUser')
 def on_chat_question(sid, data):
@@ -49,7 +43,6 @@ def on_chat_question(sid, data):
     prompt = context + query + act + "Mensaje del usuario: " + text
 
     #Guardamos la peticion a la bd para tenerlo como contexto
-    
     bd.addValue(text=text, emotion=emotion, emotionVector=emotionVector, date=date.today().strftime('%d/%m/%Y'))
 
     #Capturamos respuesta del llm
@@ -69,40 +62,48 @@ def on_load_diary(sid, data):
         sio.emit('jsonResponse', {'error': 'Fecha no proporcionada'}, room=sid)
         return
 
-    textResponse = obtener_entrada_por_fecha(fecha)
-    if textResponse is None:
+    entrada = obtener_entrada_por_fecha(fecha)
+    if entrada is None:
         sio.emit('jsonResponse', {'error': f'No se encontró entrada para la fecha {fecha}'}, room=sid)
     else:
-        sio.emit('jsonResponse', {'jsonResponse': textResponse}, room=sid)
+        sio.emit('jsonResponse', {'jsonResponse': entrada}, room=sid)
     
         
 # guardar json local
 # guardar contexto
-@sio.on('gaurdarDatos')
+@sio.on('guardarDiario')
 def on_save_diary(sid, data):
-    #guardar en json
-    guardar_entradas_diario(data)
+    try:
+        #guardar en json
+        #data debe tener la estructura: { "fecha", "entrada", "respuestas": { "q1", "q2" } }
+        guardar_entradas_diario(data)
+ 
+        #guardar en bdvectorial
+        textos = [
+            ("entrada", data.get("entrada", "")),
+            ("q1", data.get("respuestas", {}).get("q1", "")),
+            ("q2", data.get("respuestas", {}).get("q2", ""))
+        ]
+        bd = VectorDB()
+        for texto in enumerate(textos, start=1):
+            # Realizar análisis para cada texto
+            emotion,emotionVector =llm.emotionRecognition(text=texto)
+            bd.addValue(text=texto, emotion=emotion, emotionVector=emotionVector, date=date.today().strftime("%d/%m/%Y"))
 
-    #guardar en bdvectorial
-    fecha = data.get("fecha")
-    text = data.get('mensaje', '')
-    bd = VectorDB()
-    emotion,emotionVector =llm.emotionRecognition(text=text)
-    bd.addValue(text=text, emotion=emotion, emotionVector=emotionVector, date=date.today().strftime('%d/%m/%Y'))
-    #Cerramos conexion a weaviate
-    bd.closeConnection()
-    sio.emit('ackGuardar', {'Status':'ok'}, room=sid)
-
+        #Cerramos conexion a weaviate
+        bd.closeConnection()
+        return {"status": "ok"}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+        
 def on_load_diary():
     # leer json
     print("not yey")
-def on_save_diary():
-    # guardar json local
-    # guardar contexto
-    print("not yey")
+
 def on_load_profile():
     #leer json
     print("not yey")
+
 def on_save_profile():
     #guardar json
     print("not yey")
@@ -122,7 +123,6 @@ def on_generate_profile():
         file.write(resume)
     print("Resumen guardado en txt")
 
-
 def on_generate_tasks():
     #Conectamos a la base de datos
     bd = VectorDB()
@@ -133,7 +133,7 @@ def on_generate_tasks():
     # Read from the file
     with open("perfil.txt", "r",  encoding="utf-8") as file:
         context += file.read()
-    prompt = "LIMITATE A TRES LINEAS: Genera TRES tareas de UNA UNICA linea, (/desarollo psicologico / Desarrollo personal /). Usa consejos especificos gracias al **conocimiento sobre la persona**: : \n" + context
+    prompt = "LIMITATE A TRES LINEAS: Genera TRES tareas de UNA UNICA linea, (enfocado a: /desarollo psicologico / Desarrollo personal / no explicito). Usa consejos especificos gracias al **conocimiento sobre la persona**: : \n" + context
     tasks = llm.ask_deepseek(prompt)
     print(tasks["choices"][0]["message"]["content"])
     bd.closeConnection() #cerrar conexion
@@ -142,6 +142,6 @@ def on_generate_tasks():
 if __name__ == '__main__':
     on_generate_tasks() #Testeamos el generar un perfil
     # Levanta el servidor con eventlet en el puerto 5000
-   
+    print("###STARTING-BACKEND###")
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
     

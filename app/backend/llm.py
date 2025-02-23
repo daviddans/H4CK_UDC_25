@@ -4,7 +4,7 @@ import requests
 import json
 import os 
 import numpy
-from googletrans import Translator
+
 def ask_deepseek(prompt):
     #Lanzar pregunta a deepseek a traves de la api de openrouter
     response = requests.post(
