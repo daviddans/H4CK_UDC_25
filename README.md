@@ -30,10 +30,10 @@ Empleando las tecnologías:
 ## 📷 Capturas de Pantalla  
 
 ### 💬 Chatbot de Apoyo Emocional  
-![Chatbot](./assets/chatbot.png)
+![Chatbot](./assets/chatbot.jpeg)
 
 ### 📝 Diario Emocional Inteligente  
-![Diario Emocional](./assets/diario.png)
+![Diario Emocional](./assets/diario.jpeg)
 
 ## 👥 Equipo
 
