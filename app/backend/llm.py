@@ -26,11 +26,6 @@ def ask_deepseek(prompt):
 
 def emotionRecognition(text:str):
     #Reconocer las emociones de un texto utilizando un modelo basado en roberta
-
-    #Vamos a traducir el texto a ingles ya que este modelo no cuenta con un buen entrenamiento en español
-    translator = Translator()
-    text_en = translator.translate(text, src="es", dest="en")
-    text = text_en.text
     print(text)
     classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
     model_outputs = classifier(text)
